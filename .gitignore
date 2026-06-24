@@ -1,0 +1,55 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+dist/
+build/
+
+# Models (use Git LFS or DVC)
+models/
+*.pt
+*.pth
+*.ckpt
+*.pkl
+*.bin
+mlruns/
+mlflow.db
+
+# Data
+data/raw/
+data/processed/
+*.csv
+*.parquet
+*.h5
+!datasets/
+
+# Env
+.env
+.env.local
+secrets.yaml
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+
+# Logs
+logs/
+*.log
+
+# Node
+node_modules/
+.next/
+
+# Docker volumes
+postgres_data/
+redis_data/
+
+# Coverage
+.coverage
+htmlcov/
+.pytest_cache/

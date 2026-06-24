@@ -1,0 +1,74 @@
+version: "3.9"
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: deployment/docker/Dockerfile.api
+    ports:
+      - "8000:8000"
+    environment:
+      - POSTGRES_URL=postgresql://recsys:recsys@postgres:5432/recsysdb
+      - REDIS_URL=redis://redis:6379
+      - MLFLOW_URI=http://mlflow:5000
+    depends_on: [postgres, redis]
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: ../deployment/docker/Dockerfile.frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
+    depends_on: [api]
+
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: recsysdb
+      POSTGRES_USER: recsys
+      POSTGRES_PASSWORD: recsys
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+  mlflow:
+    image: ghcr.io/mlflow/mlflow:v2.13.0
+    ports:
+      - "5000:5000"
+    command: mlflow server --host 0.0.0.0 --port 5000 --backend-store-uri sqlite:///mlflow.db
+    volumes:
+      - mlflow_data:/mlflow
+
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./deployment/docker/prometheus.yml:/etc/prometheus/prometheus.yml
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3001:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - grafana_data:/var/lib/grafana
+    depends_on: [prometheus]
+
+volumes:
+  postgres_data:
+  redis_data:
+  mlflow_data:
+  grafana_data:

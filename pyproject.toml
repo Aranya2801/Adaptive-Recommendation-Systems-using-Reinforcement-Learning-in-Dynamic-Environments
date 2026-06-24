@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.backends.legacy:build"
+
+[project]
+name = "adaptive-recsys"
+version = "2.0.0"
+description = "Adaptive Recommendation Systems using Reinforcement Learning in Dynamic Environments"
+authors = [{ name = "Adaptive RecSys Research Team" }]
+license = { text = "Apache-2.0" }
+readme = "README.md"
+requires-python = ">=3.10"
+keywords = ["recommendation-systems", "reinforcement-learning", "bandits",
+            "deep-learning", "sequential-recommendation", "gnn", "production"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3.10",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+[project.urls]
+Homepage = "https://github.com/yourusername/adaptive-recsys"
+Documentation = "https://yourusername.github.io/adaptive-recsys"
+Repository = "https://github.com/yourusername/adaptive-recsys"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["src*"]
+
+[tool.black]
+line-length = 110
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
